@@ -46,14 +46,14 @@ class GameController extends AbstractController
 
                 $_SESSION['game'] = $game;
                 $_SESSION['nickname'] = $newGame['nickname'];
-
-                return $this->displayQuestion($_SESSION['game']);
+                header('Location: /question');
+//                return $this->displayQuestion($_SESSION['game']);
             }
         }
         return $this->twig->render('Home/index.html.twig', ['errors' => $errors]);
     }
 
-    public function userAnswer()
+    public function question()
     {
         $errors = [];
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -87,7 +87,7 @@ class GameController extends AbstractController
                 );
                 if ($game->getCurrentQuestion() <= 13) {
                     $game->incrementCurrentQuestion();
-                    return $this->displayQuestion($_SESSION['game']);
+                    header('Location: /question');
                 }
                 return $this->twig->render('Game/fin.html.twig', ['session' => $_SESSION]);
             }
@@ -97,6 +97,7 @@ class GameController extends AbstractController
             header('Location : /');
             exit();
         }
+        return $this->displayQuestion($_SESSION['game']);
     }
 
     public function displayQuestion(Game $game)
